@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,11 +29,16 @@ public class User {
     @Column(name="Email")
     private String email;
 
-   @Transient
+    @Transient
+   @OneToOne(fetch = FetchType.EAGER)
     Profile profile;
 
+   //@ElementCollection
+   //@CollectionTable(name="tasks", joinColumns = @JoinColumn(name="idTask"))
+   //@Column(name="Task")
+   //@OneToMany(fetch = FetchType.EAGER)
     @Transient
-    List<Task> task;
+    private List<Task> tasks = new ArrayList<>();
 
     @CreationTimestamp
     @Column(updatable = false)

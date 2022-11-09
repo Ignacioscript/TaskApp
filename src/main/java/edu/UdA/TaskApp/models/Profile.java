@@ -27,6 +27,7 @@ public class Profile {
     private String phone;
 
     @Transient
+    @OneToOne(fetch = FetchType.EAGER)
     User user;
 
     @CreationTimestamp

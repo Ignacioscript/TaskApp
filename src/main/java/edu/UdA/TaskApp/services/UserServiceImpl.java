@@ -42,7 +42,7 @@ public class UserServiceImpl implements  UserService{
         System.out.println(userFromDB.toString());
         userFromDB.setProfile(user.getProfile());
         userFromDB.setEmail(user.getEmail());
-        userFromDB.setTask(user.getTask());
+        userFromDB.setTasks(user.getTasks());
         userRepository.save(userFromDB);
 
     }
