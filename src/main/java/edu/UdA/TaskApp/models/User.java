@@ -29,15 +29,17 @@ public class User {
     @Column(name="Email")
     private String email;
 
-    @Transient
-   @OneToOne(fetch = FetchType.EAGER)
-    Profile profile;
+    //@Transient
+   @OneToOne
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
 
-   //@ElementCollection
-   //@CollectionTable(name="tasks", joinColumns = @JoinColumn(name="idTask"))
-   //@Column(name="Task")
-   //@OneToMany(fetch = FetchType.EAGER)
-    @Transient
+
+
+
+    @OneToMany
+    //@Transient
+    @JoinColumn(name= "user_id")
     private List<Task> tasks = new ArrayList<>();
 
     @CreationTimestamp

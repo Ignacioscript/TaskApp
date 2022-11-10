@@ -12,7 +12,7 @@ public interface UserService {
 
     User insert(User user);
 
-    void  updateUser(Long id, User user);
+    User updateUser(Long id, User user);
 
-    void deleteUser(Long userId);
+    boolean deleteUser(Long userId);
 }

@@ -13,7 +13,7 @@ public interface TaskService {
 
     Task insert(Task task);
 
-    void  updateTask(Long id, Task task);
+    Task updateTask(Long id, Task task);
 
-    void deleteTask(Long taskId);
+    boolean deleteTask(Long taskId);
 }

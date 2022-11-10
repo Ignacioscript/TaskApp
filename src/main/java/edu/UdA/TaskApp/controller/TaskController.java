@@ -3,12 +3,8 @@ package edu.UdA.TaskApp.controller;
 
 import edu.UdA.TaskApp.models.Task;
 import edu.UdA.TaskApp.services.TaskService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,29 +12,43 @@ import java.util.List;
 //@RequestMapping("/api/v1/task")
 public class TaskController {
 
+    @Autowired
     TaskService taskService;
 
-    public TaskController(TaskService taskService){
+    public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }
 
 
     @GetMapping("/tasks")
-    public List<Task> getTaskList(){
+    public List<Task> getTaskList() {
         return this.taskService.getTasks();
     }
 
-
-
-    /*public ResponseEntity<List<Task>> getAllTasks(){
-        List<Task> tasks = taskService.getTasks();
-        return new ResponseEntity<>(tasks, HttpStatus.OK);
+    @GetMapping(path = "/task/{id}")
+    public Task getTaskById(@PathVariable("id") Long id) {
+        return this.taskService.getTaskById(id);
     }
 
-    @GetMapping({"/taskId"})
-    public ResponseEntity<Task> getTask(@PathVariable Long taskId){
-        return new ResponseEntity<>(taskService.getTaskById(taskId), HttpStatus.OK);
-    }*/
+    @PostMapping("/tasks")
+    public Task createTask(@RequestBody Task task) {
+        return taskService.insert(task);
+    }
+
+    @PatchMapping("/task/{id}")
+    public Task updateTask(@PathVariable("id") Long id, @RequestBody Task task) {
+        return taskService.updateTask(id, task);
+    }
+
+    @DeleteMapping("/task/{id}")
+    public String deleteTask(@PathVariable("id") long id) {
+        boolean response = taskService.deleteTask(id);
+        if (response) {
+            return "se eliminó con éxito";
+        } else {
+            return "No se pudo eliminar";
+        }
+    }
 
 
 }

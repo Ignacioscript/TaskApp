@@ -12,7 +12,7 @@ public interface ProfileService {
 
     Profile insert(Profile profile);
 
-    void  updateProfile(Long id, Profile profile);
+    Profile updateProfile(Long id, Profile profile);
 
-    void deleteProfile(Long profileId);
+    boolean deleteProfile(Long profileId);
 }

@@ -37,7 +37,7 @@ public class UserServiceImpl implements  UserService{
     }
 
     @Override
-    public void updateUser(Long id, User user) {
+    public User updateUser(Long id, User user) {
         User userFromDB = userRepository.findById(id).get();
         System.out.println(userFromDB.toString());
         userFromDB.setProfile(user.getProfile());
@@ -45,11 +45,13 @@ public class UserServiceImpl implements  UserService{
         userFromDB.setTasks(user.getTasks());
         userRepository.save(userFromDB);
 
+        return userFromDB;
     }
 
     @Override
-    public void deleteUser(Long userId) {
+    public boolean deleteUser(Long userId) {
         userRepository.deleteById(userId);
 
+        return false;
     }
 }

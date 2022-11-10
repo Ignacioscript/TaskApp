@@ -26,9 +26,10 @@ public class Profile {
     @Column(name="Phone")
     private String phone;
 
-    @Transient
-    @OneToOne(fetch = FetchType.EAGER)
-    User user;
+    //@Transient
+    @OneToOne
+    @JoinColumn(name= "user_id")
+    private User user;
 
     @CreationTimestamp
     @Column(updatable = false)

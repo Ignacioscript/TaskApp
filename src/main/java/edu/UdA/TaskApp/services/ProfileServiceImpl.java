@@ -34,19 +34,21 @@ public class ProfileServiceImpl implements  ProfileService{
     }
 
     @Override
-    public void updateProfile(Long id, Profile profile) {
+    public Profile updateProfile(Long id, Profile profile) {
         Profile profileFromDb = profileRepository.findById(id).get();
         System.out.println(profileFromDb.toString());
         profileFromDb.setUser(profile.getUser());
         profileFromDb.setPhone(profile.getPhone());
         profileRepository.save(profileFromDb);
 
+        return profileFromDb;
     }
 
     @Override
-    public void deleteProfile(Long profileId) {
+    public boolean deleteProfile(Long profileId) {
         profileRepository.deleteById(profileId);
 
+        return false;
     }
 
 

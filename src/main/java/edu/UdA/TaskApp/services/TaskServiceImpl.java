@@ -1,6 +1,5 @@
 package edu.UdA.TaskApp.services;
 
-import edu.UdA.TaskApp.models.Profile;
 import edu.UdA.TaskApp.models.Task;
 import edu.UdA.TaskApp.repositories.TaskRepository;
 import org.springframework.stereotype.Service;
@@ -9,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TaskServiceImpl implements TaskService{
+public class TaskServiceImpl implements TaskService {
 
     TaskRepository taskRepository;
 
-    public TaskServiceImpl(TaskRepository taskRepository){
+    public TaskServiceImpl(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
     }
 
@@ -36,17 +35,19 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public void updateTask(Long id, Task task) {
+    public Task updateTask(Long id, Task task) {
         Task taskFromDb = taskRepository.findById(id).get();
         System.out.println(taskFromDb.toString());
         taskFromDb.setState(task.getState());
         taskFromDb.setDescription(task.getDescription());
         taskFromDb.setTitle(task.getTitle());
         taskRepository.save(taskFromDb);
+        return taskFromDb;
     }
 
     @Override
-    public void deleteTask(Long taskId) {
+    public boolean deleteTask(Long taskId) {
         taskRepository.deleteById(taskId);
+        return true;
     }
 }
