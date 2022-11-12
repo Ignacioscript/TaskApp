@@ -40,6 +40,7 @@ public class UserServiceImpl implements  UserService{
     public User updateUser(Long id, User user) {
         User userFromDB = userRepository.findById(id).get();
         System.out.println(userFromDB.toString());
+        userFromDB.setName(user.getName());
         userFromDB.setProfile(user.getProfile());
         userFromDB.setEmail(user.getEmail());
         userFromDB.setTasks(user.getTasks());

@@ -27,8 +27,8 @@ public class Profile {
     private String phone;
 
     //@Transient
-    @OneToOne
-    @JoinColumn(name= "user_id")
+      @OneToOne
+    //@JoinColumn(name= "user_id")
     private User user;
 
     @CreationTimestamp
