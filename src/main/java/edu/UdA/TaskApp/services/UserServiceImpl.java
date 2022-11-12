@@ -4,10 +4,12 @@ package edu.UdA.TaskApp.services;
 
 import edu.UdA.TaskApp.models.User;
 import edu.UdA.TaskApp.repositories.UserRepository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements  UserService{
@@ -28,7 +30,13 @@ public class UserServiceImpl implements  UserService{
 
     @Override
     public User getUserById(Long id) {
-        return userRepository.findById(id).get();
+        Optional<User> opt = userRepository.findById(id);
+        if(opt.isPresent()){
+            return opt.get();
+        }
+        else{
+            throw new UsernameNotFoundException("User with id: "+id+" Not found");
+        }
     }
 
     @Override
