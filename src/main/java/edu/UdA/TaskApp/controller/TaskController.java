@@ -1,7 +1,8 @@
 package edu.UdA.TaskApp.controller;
 
 
-import edu.UdA.TaskApp.models.Task;
+
+import edu.UdA.TaskApp.exception.taskNotFoundException;
 import edu.UdA.TaskApp.models.Task;
 import edu.UdA.TaskApp.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,62 +19,85 @@ public class TaskController {
     @Autowired
     TaskService taskService;
 
-    @GetMapping("/ViewTasks")
-    public String viewTasks(Model model){
-        List<Task> taskList = taskService.getTasks();
-        model.addAttribute("taskList", taskList);
-        return "viewTasks";
+    @GetMapping("/home")
+    public String showHomePage() {
+        return "homePage";
     }
 
-    //SERVICIO PARA AGREGAR Task
-    @GetMapping("/AddTask")
-    public String newTask(Model model){
-        Task task = new Task();
-        model.addAttribute("task",task);
-        return "addTask";
+    @GetMapping("/register")
+    public String showTaskRegistration() {
+        return "registerTaskPage";
     }
 
-    //SERVICIO PARA GUARDAR Task
-    @PostMapping("/SaveTask")
-    public String saveTask(Task task, RedirectAttributes redirectAttributes){
-        try{
-            taskService.insert(task);
-        }catch (Exception e){
-            return "redirect:/ViewTasks";
+    @PostMapping("/save")
+    public String saveTask(
+            @ModelAttribute Task task,
+            Model model
+    ) {
+        taskService.insert(task);
+        long id = taskService.insert(task).getIdTask();
+        String message = "Record with id : '" + id + "' is saved successfully !";
+        model.addAttribute("message", message);
+        return "registerTaskPage";
+    }
+
+    @GetMapping("/getAllTasks")
+    public String getAllTasks(
+            @RequestParam(value = "message", required = false) String message,
+            Model model
+    ) {
+        List<Task> tasks = taskService.getTasks();
+        model.addAttribute("list", tasks);
+        model.addAttribute("message", message);
+        return "allTasksPage";
+    }
+
+    @GetMapping("/edit")
+    public String getEditTaskPage(
+            Model model,
+            RedirectAttributes attributes,
+            @RequestParam Long id
+    ) {
+        String page;
+        try {
+            Task task = taskService.getTaskById(id);
+            model.addAttribute("Task", task);
+            page = "editTaskPage";
+        } catch (taskNotFoundException e) {
+            e.printStackTrace();
+            attributes.addAttribute("message", e.getMessage());
+            page = "redirect:getAllTasks";
         }
-        return "redirect:AddTasks";
+        return page;
     }
 
-    //SERVICIO PARA EDITAR Task
-    @GetMapping("/EditTask/{id}")
-    public String editTask(Model model, @PathVariable Long id){
-        Task task = taskService.getTaskById(id);
-        model.addAttribute("task",task);
-        return "editTask";
-
+    @PostMapping("/update")
+    public String updateTask(
+            @ModelAttribute Task task,
+            RedirectAttributes attributes
+    ) {
+        Long id = null;
+        taskService.updateTask(id, task);
+        id = task.getIdTask();
+        attributes.addAttribute("message", "Task with id: '" + id + "' is updated successfully !");
+        return "redirect:getAllTasks";
     }
 
-    //SERVICIO PARA ACTUALIZAR Task
-    @PostMapping("/UpdateTask")
-    public String updateTask(Long id, Task task){
-        try{
-            taskService.updateTask(id, task);
-        }catch (Exception e){
-            return "redirect:/ViewTasks";
-        }
-        return "redirect:EditTasks";
-    }
-
-    //SERVICIO PARA ELIMINAR Task
-    @GetMapping("/DeleteTask/{id}")
-    public String deleteTask(@PathVariable Long id){
-        try{
+    @GetMapping("/delete")
+    public String deleteTask(
+            @RequestParam Long id,
+            RedirectAttributes attributes
+    ) {
+        try {
             taskService.deleteTask(id);
-        }catch (Exception e){
-            return "redirect:/ViewTasks";
+            attributes.addAttribute("message", "Task with Id : '" + id + "' is removed successfully!");
+        } catch (taskNotFoundException e) {
+            e.printStackTrace();
+            attributes.addAttribute("message", e.getMessage());
         }
-        return "redirect:ViewTasks";
+        return "redirect:getAllTasks";
     }
+
 
 
 
